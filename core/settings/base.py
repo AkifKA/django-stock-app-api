@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-## DEBUG = True
+# DEBUG = True
 
-## ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     # Apps:
     'user',
+    'stock',
 
 ]
 
@@ -85,31 +86,31 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-## DATABASES = {
-##     'default': {
-##         'ENGINE': 'django.db.backends.sqlite3',
-##         'NAME': BASE_DIR / 'db.sqlite3',
-##     }
-## }
+# DATABASES = {
+# 'default': {
+# 'ENGINE': 'django.db.backends.sqlite3',
+# 'NAME': BASE_DIR / 'db.sqlite3',
+# }
+# }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
-## AUTH_PASSWORD_VALIDATORS = [
-##     {
-##         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-##     },
-##     {
-##         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-##     },
-##     {
-##         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-##     },
-##     {
-##         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-##     },
-## ]
+# AUTH_PASSWORD_VALIDATORS = [
+# {
+# 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+# },
+# {
+# 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+# },
+# {
+# 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+# },
+# {
+# 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+# },
+# ]
 
 
 # Internationalization
@@ -150,8 +151,8 @@ REST_AUTH = {
     'TOKEN_SERIALIZER': 'user.serializers.UserTokenSerializer',
 }
 
-# CORS-HEADERS:
-# https://pypi.org/project/django-cors-headers/
+#  CORS-HEADERS:
+#  https://pypi.org/project/django-cors-headers/
 # CORS_ALLOWED_ORIGINS = [
 #     'https://frontend.fullstack.clarusway.com',
 # ]
@@ -165,7 +166,7 @@ CORS_ALLOW_METHODS = [
     "PUT",
 ]
 
-# Trusted Addresses: (Active when publishing)
+#  Trusted Addresses: (Active when publishing)
 # CSRF_TRUSTED_ORIGINS = [
 #     'https://backend.fullstack.clarusway.com',
 # ]
