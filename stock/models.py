@@ -63,7 +63,7 @@ class Purchase(FixModel):
         Brand, on_delete=models.CASCADE, related_name='brand_purchases')
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='product_purchases')
-    quantity = models.SmallIntegerField()
+    quantity = models.PositiveSmallIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     price_total = models.DecimalField(
         max_digits=8, decimal_places=2, blank=True, null=True)
@@ -71,16 +71,74 @@ class Purchase(FixModel):
     def __str__(self):
         return f'{self.product} [+{self.quantity}]'
 
+    # ? insert/update:
+    def save(self, *args, **kwargs):
+        if (self.id):  # ? update
+            old_quantity = Purchase.objects.get(id=self.id).quantity
+            new_quantity = self.quantity - old_quantity
+        else:  # ? insert
+            new_quantity = self.quantity
+         # ? Getting product:
+        product = Product.objects.get(id=self.product_id)
+        # ? Updating product stock information:
+        product.stock += new_quantity
+        # ? Saving product:
+        product.save()
+        return super().save(*args, **kwargs)
+
+    # delete:
+    def delete(self, *args, **kwargs):
+        # ? Getting product:
+        product = Product.objects.get(id=self.product_id)
+        # ? Updating product stock information:
+        product.stock -= self.quantity
+        # ? Saving product:
+        product.save()
+        return super().delete(*args, **kwargs)
+
 
 class Sale(FixModel):
     brand = models.ForeignKey(
         Brand, on_delete=models.CASCADE, related_name='brand_sales')
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name='product_sales')
-    quantity = models.SmallIntegerField()
+    quantity = models.PositiveSmallIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     price_total = models.DecimalField(
         max_digits=8, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return f'{self.product} [-{self.quantity}]'
+
+    # ? insert/update:
+    def save(self, *args, **kwargs):
+        if (self.id):  # ? update
+            old_quantity = Sale.objects.get(id=self.id).quantity
+            new_quantity = self.quantity - old_quantity
+        else:  # ? insert
+            new_quantity = self.quantity
+        # ? Ürün getir:
+        product = Product.objects.get(id=self.product_id)
+        # ? Is the quantity enough?
+        if (product.stock >= new_quantity):
+            # ? Enough:
+            # ? Updating product stock information:
+            product.stock -= new_quantity
+            # ? Save Product:
+            product.save()
+            return super().save(*args, **kwargs)
+        else:
+            # ? Not Enough:
+            from django.core.exceptions import ValidationError
+            raise ValidationError(
+                f'Dont have enough stock. Current stock is {product.stock}')
+
+    # ?delete:
+    def delete(self, *args, **kwargs):
+        # ? Getting product:
+        product = Product.objects.get(id=self.product_id)
+        # ? Updating product stock information:
+        product.stock += self.quantity
+        # ? Saving product:
+        product.save()
+        return super().delete(*args, **kwargs)
