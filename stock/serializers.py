@@ -44,6 +44,17 @@ class BrandSerializer(FixSerializer):
         return Product.objects.filter(brand_id=obj.id).count()
 
 
+class ProductSerializer(FixSerializer):
+    category = serializers.StringRelatedField()
+    category_id = serializers.IntegerField()
+    brand = serializers.StringRelatedField()
+    brand_id = serializers.IntegerField()
+
+    class Meta:
+        model = Product
+        exclude = []
+
+
 class FirmSerializer(FixSerializer):
     class Meta:
         model = Firm
