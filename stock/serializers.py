@@ -108,6 +108,13 @@ class SaleSerializer(FixSerializer):
         category_id = products[0]['category_id']
         return list(Category.objects.filter(id=category_id).values())
 
+    # ? Don't sell if you don't have enough in stock:
+    def validate(self, data):
+        product = Product.objects.get(id=data.get('product_id'))
+        if data.get('quantity') > product.stock:
+            raise serializers.ValidationError(
+                f'Dont have enough stock. Current stock is {product.stock}')
+
 # ? ---------------------------------
 # ? Extra Serializers
 # ? ---------------------------------
