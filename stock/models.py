@@ -117,7 +117,7 @@ class Sale(FixModel):
             new_quantity = self.quantity - old_quantity
         else:  # ? insert
             new_quantity = self.quantity
-        # ? Ürün getir:
+        # ? Getting product:
         product = Product.objects.get(id=self.product_id)
         # ? Is the quantity enough?
         if (product.stock >= new_quantity):
